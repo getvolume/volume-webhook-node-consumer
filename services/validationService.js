@@ -3,10 +3,10 @@ require('dotenv').config();
 const crypto = require('crypto');
 const axios = require('axios');
 
-function validateData(payload, signature) {
+async function validateData(payload, signature) {
     const errors = [];
 
-    let verification = verifySignature(signature, JSON.stringify(payload));
+    let verification = await verifySignature(signature, JSON.stringify(payload));
     if (!verification) {
         errors.push('Signature not valid');
     }

@@ -6,21 +6,20 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.put('/api/webhook', (req, res) => {
+app.put('/api/webhook', async (req, res) => {
     const payload = req.body;
 
     // Get the Authorization header
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-        return res.status(401).json({ message: 'Missing or invalid Authorization header' });
+        return res.status(401).json({message: 'Missing or invalid Authorization header'});
     }
 
     // Extract the token from the Authorization header
     const signature = authHeader.split(' ')[1];
 
-    const validation = validateData(payload, signature);
-
+    const validation = await validateData(payload, signature);
     if (!validation.isValid) {
         // If validation fails, respond with a 400 Bad Request status and the error messages
         return res.status(400).json({
