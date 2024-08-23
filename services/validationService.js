@@ -3,12 +3,14 @@ require('dotenv').config();
 const crypto = require('crypto');
 const axios = require('axios');
 
-async function validateData(payload, signature) {
+async function validateData(payload, payloadRaw, signature) {
     const errors = [];
     // IMPORTANT:
     // As we are using bodyParser.json() in fhe configuration and the payload is a deserialized object,we HAVE TO STRINGIFY it again before verifying.
     // If You do not parse the request body, and it is kept untouched, then it can be passed to  verification without any modifications.
-    let verification = await verifySignature(signature, JSON.stringify(payload));
+    console.log(JSON.stringify(payload))
+    console.log(payloadRaw)
+    let verification = await verifySignature(signature, payloadRaw);
     if (!verification) {
         errors.push('Signature not valid');
     }
